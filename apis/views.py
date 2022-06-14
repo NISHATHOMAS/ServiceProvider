@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apis.models import ServiceAreas, Provider, GeoJson
-from apis.serializers import ServiceAreaSerializer, ProviderSerializer
+from apis.serializers import ServiceAreaSerializer, ProviderSerializer, GeoJsonSerializer
 
 
 class ProvidersListCreateApiView(APIView):
@@ -64,6 +64,7 @@ class GetPolygonApiView(APIView):
         """
         lat = request.GET.get("lat")
         lon = request.GET.get("lon")
-        geoJson = GeoJson.objects.filter(Q(latitude=lat) | Q(longitude=lon))
+
+        geoJson = ServiceAreas.objects.filter(Q(polygon__latitude=lat) | Q(polygon__longitude=lon))
         serializer = ServiceAreaSerializer(geoJson, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

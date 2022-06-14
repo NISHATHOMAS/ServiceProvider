@@ -1,0 +1,2 @@
+class ServiceAreaSerializer:
+    pass
